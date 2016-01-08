@@ -7,8 +7,8 @@
     <ProjectGuid>{5806CA12-6BEB-468B-B0BE-820A39416B84}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GetShadowSocksPWD</RootNamespace>
-    <AssemblyName>GetShadowSocksPWD</AssemblyName>
+    <RootNamespace>iShadowSocksHelper</RootNamespace>
+    <AssemblyName>iShadowSocksHelper</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -67,7 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\JsonHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\RootObject.cs" />

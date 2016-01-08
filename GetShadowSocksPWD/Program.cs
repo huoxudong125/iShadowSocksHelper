@@ -12,6 +12,7 @@ namespace GetShadowSocksPWD
 {
     internal class Program
     {
+        private static readonly string configfile = "gui-config.json";
         private static void Main(string[] args)
         {
             GenrateFreeServersConfig();
@@ -80,8 +81,14 @@ namespace GetShadowSocksPWD
                 }
 
                 Console.WriteLine("Serialize the config to file.");
+                var path = "server.txt";
+                WriteServersToFile(rootObject,path);
 
-                WriteServersToFile(rootObject);
+                Console.WriteLine("Update the gui-config.json");
+
+                File.Delete(configfile);
+
+                File.Move(path, configfile);
 
                 Console.WriteLine("Successful! Enjoy yourself!");
             }
@@ -91,11 +98,11 @@ namespace GetShadowSocksPWD
             }
         }
 
-        private static void WriteServersToFile(RootObject rootObject)
+        private static void WriteServersToFile(RootObject rootObject,string path)
         {
             //var str = JsonHelper.FormatJson(JsonHelper.Serialize(rootObject));
             var str = JsonConvert.SerializeObject(rootObject,Formatting.Indented);
-            var path = "server.txt";
+            
             using (var file = new StreamWriter(path, false, Encoding.UTF8))
             {
                 file.Write(str);
