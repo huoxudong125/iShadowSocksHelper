@@ -72,7 +72,7 @@ namespace GetShadowSocksPWD
                     var server = new ServerConfig()
                     {
                         server = h4nodes[0].InnerText.Split(':')[1],
-                        server_port = h4nodes[1].InnerText.Split(':')[1],
+                        server_port = int.Parse(h4nodes[1].InnerText.Split(':')[1]),
                         password = h4nodes[2].InnerText.Split(':')[1],
                         method = h4nodes[3].InnerText.Split(':')[1],
                         remarks = h4nodes[0].InnerText.Split(':')[1],
