@@ -29,6 +29,7 @@ namespace GetShadowSocksPWD
             T obj = (T)ser.ReadObject(ms);
             return obj;
         } 
+        
         #endregion
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using ScrapySharp.Extensions;
 using ScrapySharp.Html;
 using ScrapySharp.Network;
@@ -92,7 +93,8 @@ namespace GetShadowSocksPWD
 
         private static void WriteServersToFile(RootObject rootObject)
         {
-            var str = JsonHelper.FormatJson(JsonHelper.Serialize(rootObject));
+            //var str = JsonHelper.FormatJson(JsonHelper.Serialize(rootObject));
+            var str = JsonConvert.SerializeObject(rootObject,Formatting.Indented);
             var path = "server.txt";
             using (var file = new StreamWriter(path, false, Encoding.UTF8))
             {
