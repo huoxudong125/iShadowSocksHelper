@@ -29,28 +29,6 @@ namespace GetShadowSocksPWD
         {
             try
             {
-                var browser = new ScrapingBrowser();
-
-                //set UseDefaultCookiesParser as false if a website returns invalid cookies format
-                //browser.UseDefaultCookiesParser = false;
-
-                var homePage = browser.NavigateToPage(new Uri("http://www.ishadowsocks.com/"));
-
-                var freeSection = homePage.Find("Section", By.Id("free")).FirstOrDefault();
-                if (freeSection == null)
-                {
-                    Console.WriteLine("Can't find the Free section.");
-                }
-
-                //PageWebForm form = homePage.FindFormById("sb_form");
-                //form["q"] = "scrapysharp";
-                //form.Method = HttpVerb.Get;
-                //WebPage resultsPage = form.Submit();
-
-                //HtmlNode[] resultsLinks = resultsPage.Html.CssSelect("div.sb_tlst h3 a").ToArray();
-
-                var serverNodes = homePage.Html.CssSelect("#free  >div.container > div.row > div.col-lg-4");
-
                 var rootObject = new RootObject()
                 {
                     configs = new List<ServerConfig>(),
@@ -66,24 +44,10 @@ namespace GetShadowSocksPWD
                     availabilityStatistics = false
                 };
 
-                Console.WriteLine("Read Servers from HTML");
-
                 var serverList = rootObject.configs;
 
-                Console.WriteLine("Parse the server html");
-                foreach (var serverNode in serverNodes)
-                {
-                    var h4nodes = serverNode.ChildNodes.Where(n => n.Name.Contains("h4")).ToList();
-                    var server = new ServerConfig()
-                    {
-                        server = h4nodes[0].InnerText.Split(':')[1],
-                        server_port = int.Parse(h4nodes[1].InnerText.Split(':')[1]),
-                        password = h4nodes[2].InnerText.Split(':')[1],
-                        method = h4nodes[3].InnerText.Split(':')[1],
-                        remarks = h4nodes[0].InnerText.Split(':')[1],
-                    };
-                    serverList.Add(server);
-                }
+                GetIshadowsocksServers(serverList);
+                GetFreeShadowsocksServers(serverList);
 
                 Console.WriteLine("Serialize the config to file.");
                 var path = "server.txt";
@@ -100,6 +64,76 @@ namespace GetShadowSocksPWD
             catch (Exception ex)
             {
                 Console.WriteLine("Sorry,Run Error:{0}", ex.Message);
+            }
+        }
+
+        private static void GetIshadowsocksServers(List<ServerConfig> serverList)
+        {
+            var browser = new ScrapingBrowser();
+
+            //set UseDefaultCookiesParser as false if a website returns invalid cookies format
+            //browser.UseDefaultCookiesParser = false;
+            Console.WriteLine("Open website http://www.ishadowsocks.com/");
+            var homePage = browser.NavigateToPage(new Uri("http://www.ishadowsocks.com/"));
+
+            var freeSection = homePage.Find("Section", By.Id("free")).FirstOrDefault();
+            if (freeSection == null)
+            {
+                Console.WriteLine("Can't find the Free section.");
+            }
+
+
+            var serverNodes = homePage.Html.CssSelect("#free  >div.container > div.row > div.col-lg-4");
+
+
+            Console.WriteLine("Read Servers from HTML");
+
+
+            Console.WriteLine("Parse the server html");
+            foreach (var serverNode in serverNodes)
+            {
+                var h4nodes = serverNode.ChildNodes.Where(n => n.Name.Contains("h4")).ToList();
+                var server = new ServerConfig()
+                {
+                    server = h4nodes[0].InnerText.Split(':')[1],
+                    server_port = int.Parse(h4nodes[1].InnerText.Split(':')[1]),
+                    password = h4nodes[2].InnerText.Split(':')[1],
+                    method = h4nodes[3].InnerText.Split(':')[1],
+                    remarks = h4nodes[0].InnerText.Split(':')[1],
+                };
+                serverList.Add(server);
+            }
+        }
+
+        private static void GetFreeShadowsocksServers(List<ServerConfig> serverList)
+        {
+            var browser = new ScrapingBrowser();
+
+            //set UseDefaultCookiesParser as false if a website returns invalid cookies format
+            //browser.UseDefaultCookiesParser = false;
+            Console.WriteLine("Open website http://freeshadowsocks.cf/");
+            var homePage = browser.NavigateToPage(new Uri("http://freeshadowsocks.cf/"));
+
+         
+            var serverNodes = homePage.Html.CssSelect("div.container > div.row > div.col-md-4");
+
+
+            Console.WriteLine("Read Servers from HTML");
+
+
+            Console.WriteLine("Parse the server html");
+            foreach (var serverNode in serverNodes)
+            {
+                var h4nodes = serverNode.ChildNodes.Where(n => n.Name.Contains("h4")).ToList();
+                var server = new ServerConfig()
+                {
+                    server = h4nodes[0].InnerText.Split(':')[1],
+                    server_port = int.Parse(h4nodes[1].InnerText.Split(':')[1]),
+                    password = h4nodes[2].InnerText.Split(':')[1],
+                    method = h4nodes[3].InnerText.Split(':')[1],
+                    remarks = h4nodes[0].InnerText.Split(':')[1],
+                };
+                serverList.Add(server);
             }
         }
 
