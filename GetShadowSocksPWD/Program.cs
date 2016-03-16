@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
-using ScrapySharp.Extensions;
-using ScrapySharp.Html;
-using ScrapySharp.Network;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
 using System.Text;
+using Newtonsoft.Json;
+using ScrapySharp.Extensions;
+using ScrapySharp.Html;
+using ScrapySharp.Network;
 
 namespace GetShadowSocksPWD
 {
@@ -46,8 +46,23 @@ namespace GetShadowSocksPWD
 
                 var serverList = rootObject.configs;
 
-                GetIshadowsocksServers(serverList);
-                GetFreeShadowsocksServers(serverList);
+                try
+                {
+                    GetIshadowsocksServers(serverList);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                try
+                {
+                    GetFreeShadowsocksServers(serverList);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
                 Console.WriteLine("Serialize the config to file.");
                 var path = "server.txt";
@@ -82,12 +97,9 @@ namespace GetShadowSocksPWD
                 Console.WriteLine("Can't find the Free section.");
             }
 
-
             var serverNodes = homePage.Html.CssSelect("#free  >div.container > div.row > div.col-lg-4");
 
-
             Console.WriteLine("Read Servers from HTML");
-
 
             Console.WriteLine("Parse the server html");
             foreach (var serverNode in serverNodes)
@@ -114,12 +126,9 @@ namespace GetShadowSocksPWD
             Console.WriteLine("Open website http://freeshadowsocks.cf/");
             var homePage = browser.NavigateToPage(new Uri("http://freeshadowsocks.cf/"));
 
-         
             var serverNodes = homePage.Html.CssSelect("div.container > div.row > div.col-md-4");
 
-
             Console.WriteLine("Read Servers from HTML");
-
 
             Console.WriteLine("Parse the server html");
             foreach (var serverNode in serverNodes)
@@ -163,7 +172,7 @@ namespace GetShadowSocksPWD
                 //.ForEach(x => x.Kill());
 
                 Console.WriteLine("{1}Start the process [{0}]", exeFile, Environment.NewLine);
-                
+
                 //start
                 Process.Start(exeFile);
             }
