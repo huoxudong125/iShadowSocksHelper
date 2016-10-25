@@ -88,8 +88,8 @@ namespace GetShadowSocksPWD
 
             //set UseDefaultCookiesParser as false if a website returns invalid cookies format
             //browser.UseDefaultCookiesParser = false;
-            Console.WriteLine("Open website http://www.ishadowsocks.com/");
-            var homePage = browser.NavigateToPage(new Uri("http://www.ishadowsocks.com/"));
+            Console.WriteLine("Open website http://www.ishadowsocks.org/");
+            var homePage = browser.NavigateToPage(new Uri("http://www.ishadowsocks.org/"));
 
             var freeSection = homePage.Find("Section", By.Id("free")).FirstOrDefault();
             if (freeSection == null)
@@ -97,7 +97,7 @@ namespace GetShadowSocksPWD
                 Console.WriteLine("Can't find the Free section.");
             }
 
-            var serverNodes = homePage.Html.CssSelect("#free  >div.container > div.row > div.col-lg-4");
+            var serverNodes = homePage.Html.CssSelect("#free  >div.container > div.row > div.col-sm-4");
 
             Console.WriteLine("Read Servers from HTML");
 
