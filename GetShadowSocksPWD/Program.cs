@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Text;
+using iShadowSocksHelper;
 using Newtonsoft.Json;
 using ScrapySharp.Extensions;
 using ScrapySharp.Html;
@@ -16,10 +17,12 @@ namespace GetShadowSocksPWD
     {
         private static readonly string configfile = "gui-config.json";
 
-        private static void Main(string[] args)
+        private  static void Main(string[] args)
         {
-            GenrateFreeServersConfig();
-            ReStartShadowSocks();
+            //GenrateFreeServersConfig();
+            //ReStartShadowSocks();
+
+            FreessOrgHelper.GetIshadowsocksServers();
 
             Console.WriteLine("Enter any key to exit.");
             Console.Read();
