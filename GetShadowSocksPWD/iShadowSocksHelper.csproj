@@ -77,8 +77,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Class1.cs" />
+    <Compile Include="Domain\FreessOrgEntity.cs" />
     <Compile Include="FreessOrgHelper.cs" />
+    <Compile Include="ShadowsocksOrgHelper.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

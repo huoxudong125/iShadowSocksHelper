@@ -20,136 +20,33 @@ namespace GetShadowSocksPWD
         private  static void Main(string[] args)
         {
             //GenrateFreeServersConfig();
-            //ReStartShadowSocks();
+           
 
-            FreessOrgHelper.GetIshadowsocksServers();
+            var rootobject = FreessOrgHelper.GetFullServerConfig();
+            UpdateGuiConfig(rootobject);
+
+            ReStartShadowSocks();
 
             Console.WriteLine("Enter any key to exit.");
             Console.Read();
         }
 
-        private static void GenrateFreeServersConfig()
+        private static void UpdateGuiConfig(object rootObject)
         {
-            try
-            {
-                var rootObject = new RootObject()
-                {
-                    configs = new List<ServerConfig>(),
-                    index = -1,
-                    strategy = "com.shadowsocks.strategy.balancing",
-                    global = false,
-                    enabled = true,
-                    shareOverLan = false,
-                    isDefault = false,
-                    localPort = 1080,
-                    pacUrl = null,
-                    useOnlinePac = false,
-                    availabilityStatistics = false
-                };
+            Console.WriteLine("Serialize the config to file.");
+            var path = "server.txt";
+            WriteServersToFile(rootObject, path);
 
-                var serverList = rootObject.configs;
+            Console.WriteLine("Update the gui-config.json");
 
-                try
-                {
-                    GetIshadowsocksServers(serverList);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+            File.Delete(configfile);
 
-                try
-                {
-                    GetFreeShadowsocksServers(serverList);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+            File.Move(path, configfile);
 
-                Console.WriteLine("Serialize the config to file.");
-                var path = "server.txt";
-                WriteServersToFile(rootObject, path);
-
-                Console.WriteLine("Update the gui-config.json");
-
-                File.Delete(configfile);
-
-                File.Move(path, configfile);
-
-                Console.WriteLine("Successful! Enjoy yourself!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Sorry,Run Error:{0}", ex.Message);
-            }
+            Console.WriteLine("Successful! Enjoy yourself!");
         }
 
-        private static void GetIshadowsocksServers(List<ServerConfig> serverList)
-        {
-            var browser = new ScrapingBrowser();
-
-            //set UseDefaultCookiesParser as false if a website returns invalid cookies format
-            //browser.UseDefaultCookiesParser = false;
-            Console.WriteLine("Open website http://www.ishadowsocks.org/");
-            var homePage = browser.NavigateToPage(new Uri("http://www.ishadowsocks.org/"));
-
-            var freeSection = homePage.Find("Section", By.Id("free")).FirstOrDefault();
-            if (freeSection == null)
-            {
-                Console.WriteLine("Can't find the Free section.");
-            }
-
-            var serverNodes = homePage.Html.CssSelect("#free  >div.container > div.row > div.col-sm-4");
-
-            Console.WriteLine("Read Servers from HTML");
-
-            Console.WriteLine("Parse the server html");
-            foreach (var serverNode in serverNodes)
-            {
-                var h4nodes = serverNode.ChildNodes.Where(n => n.Name.Contains("h4")).ToList();
-                var server = new ServerConfig()
-                {
-                    server = h4nodes[0].InnerText.Split(':')[1],
-                    server_port = int.Parse(h4nodes[1].InnerText.Split(':')[1]),
-                    password = h4nodes[2].InnerText.Split(':')[1],
-                    method = h4nodes[3].InnerText.Split(':')[1],
-                    remarks = h4nodes[0].InnerText.Split(':')[1],
-                };
-                serverList.Add(server);
-            }
-        }
-
-        private static void GetFreeShadowsocksServers(List<ServerConfig> serverList)
-        {
-            var browser = new ScrapingBrowser();
-
-            //set UseDefaultCookiesParser as false if a website returns invalid cookies format
-            //browser.UseDefaultCookiesParser = false;
-            Console.WriteLine("Open website http://freeshadowsocks.cf/");
-            var homePage = browser.NavigateToPage(new Uri("http://freeshadowsocks.cf/"));
-
-            var serverNodes = homePage.Html.CssSelect("div.container > div.row > div.col-md-4");
-
-            Console.WriteLine("Read Servers from HTML");
-
-            Console.WriteLine("Parse the server html");
-            foreach (var serverNode in serverNodes)
-            {
-                var h4nodes = serverNode.ChildNodes.Where(n => n.Name.Contains("h4")).ToList();
-                var server = new ServerConfig()
-                {
-                    server = h4nodes[0].InnerText.Split(':')[1],
-                    server_port = int.Parse(h4nodes[1].InnerText.Split(':')[1]),
-                    password = h4nodes[2].InnerText.Split(':')[1],
-                    method = h4nodes[3].InnerText.Split(':')[1],
-                    remarks = h4nodes[0].InnerText.Split(':')[1],
-                };
-                serverList.Add(server);
-            }
-        }
-
-        private static void WriteServersToFile(RootObject rootObject, string path)
+        private static void WriteServersToFile(Object rootObject, string path)
         {
             //var str = JsonHelper.FormatJson(JsonHelper.Serialize(rootObject));
             var str = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
@@ -159,6 +56,8 @@ namespace GetShadowSocksPWD
                 file.Write(str);
             }
         }
+
+
 
         private static void ReStartShadowSocks()
         {

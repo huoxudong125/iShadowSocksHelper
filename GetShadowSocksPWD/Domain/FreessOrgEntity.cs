@@ -9,7 +9,7 @@ namespace iShadowSocksHelper.Domain
  
     public class Rootobject
     {
-        public Config[] configs { get; set; }
+        public List<Config> configs { get; set; }
         public string strategy { get; set; }
         public int index { get; set; }
         public bool global { get; set; }

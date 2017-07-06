@@ -5,6 +5,9 @@ No word to intruduce the simple application
 ##Merger all modules into a single exe file
 [ILMerge-GUI, the .NET merger](https://ilmergegui.codeplex.com/)  
 
+or 
+[ILMergeGUI on GitHub](https://github.com/jpdillingham/ILMergeGUI)
+
 Relation to the ILMerge tool
 The ILMerge team has no direct relations to this project. So please if you have a question related to ILMerge itself, ask them. And if you have a question about this GUI, just post an issue or open a discussion. 
 
